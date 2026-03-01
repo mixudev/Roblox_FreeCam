@@ -1,19 +1,19 @@
 -- loader.lua
 -- Main executor entry point script
 -- Note: Replace the URL below with your actual repository RAW URL
-local GITHUB_RAW_BASE = "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/src/"
+local GITHUB_RAW_BASE = "https://raw.githubusercontent.com/mixudev/Roblox_FreeCam/main/src/"
 
 -- If testing locally from workspace, you might require() but this is for HttpGet executor injection
 local ModulesToLoad = {
-    "config",
-    "speed",
-    "keybind",
-    "input",
-    "nametag",
-    "recording",
-    "camera",
-    "ui",
-    "bootstrap"
+    {file = "config", key = "Config"},
+    {file = "speed", key = "Speed"},
+    {file = "keybind", key = "Keybind"},
+    {file = "input", key = "Input"},
+    {file = "nametag", key = "Nametag"},
+    {file = "recording", key = "Recording"},
+    {file = "camera", key = "Camera"},
+    {file = "ui", key = "UI"},
+    {file = "bootstrap", key = "bootstrap"}
 }
 
 if not game:IsLoaded() then
@@ -45,24 +45,24 @@ corner.CornerRadius = UDim.new(0, 8)
 
 local successCount = 0
 
-for _, modName in ipairs(ModulesToLoad) do
-    loaderText.Text = "Downloading " .. modName .. ".lua..."
+for _, modData in ipairs(ModulesToLoad) do
+    loaderText.Text = "Downloading " .. modData.file .. ".lua..."
     task.wait() -- Small yield to show progression
     
     local success, response = pcall(function()
-        return game:HttpGet(GITHUB_RAW_BASE .. modName .. ".lua")
+        return game:HttpGet(GITHUB_RAW_BASE .. modData.file .. ".lua")
     end)
     
     if success and response then
         local envFunc, err = loadstring(response)
         if envFunc then
-            _G.FreecamModules[modName] = envFunc()
+            _G.FreecamModules[modData.key] = envFunc()
             successCount = successCount + 1
         else
-            warn("Syntax error in " .. modName .. ": " .. tostring(err))
+            warn("Syntax error in " .. modData.file .. ": " .. tostring(err))
         end
     else
-        warn("Failed to download: " .. modName)
+        warn("Failed to download: " .. modData.file)
     end
 end
 
