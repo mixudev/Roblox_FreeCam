@@ -100,6 +100,12 @@ function CameraManager.Enable()
     
     -- Hide character while in freecam locally
     if localPlayer.Character then
+        local hrp = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            CameraManager._cacheHRPAnchor = hrp.Anchored
+            hrp.Anchored = true
+        end
+
         local iter; iter = function(inst)
             for _, v in ipairs(inst:GetChildren()) do
                 if v:IsA("BasePart") then
@@ -129,6 +135,12 @@ function CameraManager.Disable()
     currentCamera.CameraSubject = localPlayer.Character and localPlayer.Character:FindFirstChild("Humanoid") or nil
 
     if localPlayer.Character then
+        local hrp = localPlayer.Character:FindFirstChild("HumanoidRootPart")
+        if hrp and CameraManager._cacheHRPAnchor ~= nil then
+            hrp.Anchored = CameraManager._cacheHRPAnchor
+            CameraManager._cacheHRPAnchor = nil
+        end
+
         local iter; iter = function(inst)
             for _, v in ipairs(inst:GetChildren()) do
                 if v:IsA("BasePart") then

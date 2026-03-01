@@ -10,6 +10,7 @@ function Bootstrap.Init()
     local Camera = _G.Freecam.require("camera")
     local Nametag = _G.Freecam.require("nametag")
     local Recording = _G.Freecam.require("recording")
+    local Visuals = _G.Freecam.require("visuals")
     local UI = _G.Freecam.require("ui")
 
     -- 1. Initialize Subsystems
@@ -18,6 +19,7 @@ function Bootstrap.Init()
     Camera.Init()
     Nametag.Init()
     Recording.Init()
+    Visuals.Init()
     UI.Init()
 
     -- 2. Register Hotkeys based on config

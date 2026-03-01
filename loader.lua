@@ -106,6 +106,7 @@ local ModulesToLoad = {
     "input",
     "nametag",
     "recording",
+    "visuals",
     "camera",
     "ui"
 }

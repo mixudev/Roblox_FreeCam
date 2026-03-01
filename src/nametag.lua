@@ -62,9 +62,7 @@ end
 
 function Nametag.Init()
     for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= Players.LocalPlayer then
-            HandlePlayer(player)
-        end
+        HandlePlayer(player)
     end
 
     table.insert(Nametag._connections, Players.PlayerAdded:Connect(function(player)
@@ -80,12 +78,10 @@ function Nametag.Toggle(state)
     end
 
     for _, player in ipairs(Players:GetPlayers()) do
-        if player ~= Players.LocalPlayer then
-            if Nametag.IsHidden then
-                HideCharacterNametags(player.Character)
-            else
-                RestoreCharacterNametags(player.Character)
-            end
+        if Nametag.IsHidden then
+            HideCharacterNametags(player.Character)
+        else
+            RestoreCharacterNametags(player.Character)
         end
     end
 end
