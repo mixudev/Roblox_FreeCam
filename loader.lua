@@ -1,35 +1,91 @@
 -- loader.lua
 -- Main executor entry point script
--- Note: Replace the URL below with your actual repository RAW URL
-local GITHUB_RAW_BASE = "https://raw.githubusercontent.com/mixudev/Roblox_FreeCam/main/src/"
 
--- If testing locally from workspace, you might require() but this is for HttpGet executor injection
-local ModulesToLoad = {
-    {file = "config", key = "Config"},
-    {file = "speed", key = "Speed"},
-    {file = "keybind", key = "Keybind"},
-    {file = "input", key = "Input"},
-    {file = "nametag", key = "Nametag"},
-    {file = "recording", key = "Recording"},
-    {file = "camera", key = "Camera"},
-    {file = "ui", key = "UI"},
-    {file = "bootstrap", key = "bootstrap"}
-}
+local HttpService = game:GetService("HttpService")
 
-if not game:IsLoaded() then
-    game.Loaded:Wait()
+local isRemote = false
+local baseUrl = "https://raw.githubusercontent.com/mixudev/Roblox_FreeCam/main/src"
+local ScriptFolder = nil
+
+if script and script.Parent then
+    isRemote = false
+    ScriptFolder = script.Parent
+else
+    isRemote = true
 end
 
 -- Prevent double injection
-if _G.FreecamModules and _G.FreecamModules.Loaded then
+if _G.Freecam and _G.Freecam.Loaded then
     warn("Freecam System is already loaded!")
-    if _G.FreecamModules.UI then
-        _G.FreecamModules.UI.Toggle() -- Toggle UI if they try to execute again
+    if _G.Freecam.UI then
+        _G.Freecam.UI.Toggle()
     end
     return
 end
 
-_G.FreecamModules = {}
+local cache = {}
+
+local function require_module(path)
+    if cache[path] then
+        return cache[path]
+    end
+
+    local module
+
+    if isRemote then
+        local url = baseUrl .. "/" .. path .. ".lua"
+        local success, res = pcall(function()
+            if type(game.HttpGet) == "function" then
+                return game:HttpGet(url)
+            else
+                return HttpService:GetAsync(url)
+            end
+        end)
+
+        if not success or not res or type(res) ~= "string" or #res < 5 then
+            warn("Failed to download from GitHub: " .. url)
+            return nil
+        end
+        
+        local content = res
+        if type(content) == "string" and content:sub(1,3) == "\239\187\191" then
+            content = content:sub(4)
+        end
+
+        local fn, err = loadstring(content, path)
+        if not fn then
+            warn("Failed to parse module: " .. path .. "\nError: " .. tostring(err))
+            return nil
+        end
+
+        local okExec, resultExec = pcall(fn)
+        if not okExec then
+            warn("Module execution error: " .. path .. "\nError: " .. tostring(resultExec))
+            return nil
+        end
+        module = resultExec
+    else
+        local part = ScriptFolder
+        for segment in path:gmatch("[^/]+") do
+            part = part:FindFirstChild(segment)
+            if not part then return nil end
+        end
+        module = require(part)
+    end
+
+    cache[path] = module
+    return module
+end
+
+do
+    local g = _G or getfenv and getfenv(0) or {}
+    g.Freecam = g.Freecam or {}
+    g.Freecam.require = require_module
+    g.Freecam.isRemote = isRemote
+    g.Freecam.baseUrl = baseUrl
+end
+
+-- Load all modules
 local loaderGui = Instance.new("ScreenGui", game:GetService("CoreGui") or game:GetService("Players").LocalPlayer.PlayerGui)
 loaderGui.Name = "FreecamLoading"
 local loaderText = Instance.new("TextLabel", loaderGui)
@@ -43,34 +99,39 @@ loaderText.Text = "Downloading Freecam..."
 local corner = Instance.new("UICorner", loaderText)
 corner.CornerRadius = UDim.new(0, 8)
 
-local successCount = 0
+local ModulesToLoad = {
+    "config",
+    "speed",
+    "keybind",
+    "input",
+    "nametag",
+    "recording",
+    "camera",
+    "ui"
+}
 
-for _, modData in ipairs(ModulesToLoad) do
-    loaderText.Text = "Downloading " .. modData.file .. ".lua..."
-    task.wait() -- Small yield to show progression
-    
-    local success, response = pcall(function()
-        return game:HttpGet(GITHUB_RAW_BASE .. modData.file .. ".lua")
-    end)
-    
-    if success and response then
-        local envFunc, err = loadstring(response)
-        if envFunc then
-            _G.FreecamModules[modData.key] = envFunc()
-            successCount = successCount + 1
-        else
-            warn("Syntax error in " .. modData.file .. ": " .. tostring(err))
-        end
-    else
-        warn("Failed to download: " .. modData.file)
+-- Pre-load core files first to populate cache
+local successCount = 0
+for _, modName in ipairs(ModulesToLoad) do
+    loaderText.Text = "Downloading " .. modName .. ".lua..."
+    task.wait()
+    local mod = require_module(modName)
+    if mod then
+        successCount = successCount + 1
     end
 end
 
 if successCount == #ModulesToLoad then
     loaderText.Text = "Initializing..."
-    _G.FreecamModules.bootstrap.Init()
-    _G.FreecamModules.Loaded = true
-    loaderText.Text = "Loaded Successfully!"
+    local Bootstrap = require_module("bootstrap")
+    if Bootstrap then
+        Bootstrap.Init()
+        _G.Freecam.Loaded = true
+        _G.Freecam.UI = require_module("ui")
+        loaderText.Text = "Loaded Successfully!"
+    else
+        loaderText.Text = "Failed to bootstrap."
+    end
     task.wait(1)
 else
     loaderText.Text = "Failed to load all modules."

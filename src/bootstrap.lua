@@ -4,13 +4,13 @@
 local Bootstrap = {}
 
 function Bootstrap.Init()
-    local Config = _G.FreecamModules.Config
-    local KeybindManager = _G.FreecamModules.Keybind
-    local Input = _G.FreecamModules.Input
-    local Camera = _G.FreecamModules.Camera
-    local Nametag = _G.FreecamModules.Nametag
-    local Recording = _G.FreecamModules.Recording
-    local UI = _G.FreecamModules.UI
+    local Config = _G.Freecam.require("config")
+    local KeybindManager = _G.Freecam.require("keybind")
+    local Input = _G.Freecam.require("input")
+    local Camera = _G.Freecam.require("camera")
+    local Nametag = _G.Freecam.require("nametag")
+    local Recording = _G.Freecam.require("recording")
+    local UI = _G.Freecam.require("ui")
 
     -- 1. Initialize Subsystems
     KeybindManager.Init()

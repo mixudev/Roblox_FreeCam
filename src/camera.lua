@@ -6,9 +6,9 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 
-local Config = _G.FreecamModules and _G.FreecamModules.Config or require(script.Parent.config)
-local SpeedManager = _G.FreecamModules and _G.FreecamModules.Speed or require(script.Parent.speed)
-local Input = _G.FreecamModules and _G.FreecamModules.Input or require(script.Parent.input)
+local Config = _G.Freecam.require("config")
+local SpeedManager = _G.Freecam.require("speed")
+local Input = _G.Freecam.require("input")
 
 local CameraManager = {
     Enabled = false,

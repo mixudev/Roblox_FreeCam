@@ -1,7 +1,7 @@
 -- src/speed.lua
 -- Real-time adjustable speed manager
 
-local Config = _G.FreecamModules and _G.FreecamModules.Config or require(script.Parent.config)
+local Config = _G.Freecam.require("config")
 
 local SpeedManager = {
     CurrentSpeed = Config.Camera.BaseSpeed,

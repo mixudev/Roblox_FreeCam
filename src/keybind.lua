@@ -2,7 +2,7 @@
 -- Centralized keybind manager
 
 local UserInputService = game:GetService("UserInputService")
-local Config = _G.FreecamModules and _G.FreecamModules.Config or require(script.Parent.config)
+local Config = _G.Freecam.require("config")
 
 local KeybindManager = {
     _callbacks = {}

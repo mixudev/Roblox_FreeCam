@@ -6,11 +6,11 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 
-local Config = _G.FreecamModules and _G.FreecamModules.Config or require(script.Parent.config)
-local Camera = _G.FreecamModules and _G.FreecamModules.Camera or require(script.Parent.camera)
-local SpeedManager = _G.FreecamModules and _G.FreecamModules.Speed or require(script.Parent.speed)
-local Nametag = _G.FreecamModules and _G.FreecamModules.Nametag or require(script.Parent.nametag)
-local Recording = _G.FreecamModules and _G.FreecamModules.Recording or require(script.Parent.recording)
+local Config = _G.Freecam.require("config")
+local Camera = _G.Freecam.require("camera")
+local SpeedManager = _G.Freecam.require("speed")
+local Nametag = _G.Freecam.require("nametag")
+local Recording = _G.Freecam.require("recording")
 
 local UI = {
     ScreenGui = nil,

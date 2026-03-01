@@ -2,8 +2,8 @@
 -- Manages continuous input states for the freecam movement
 
 local UserInputService = game:GetService("UserInputService")
-local Config = _G.FreecamModules and _G.FreecamModules.Config or require(script.Parent.config)
-local SpeedManager = _G.FreecamModules and _G.FreecamModules.Speed or require(script.Parent.speed)
+local Config = _G.Freecam.require("config")
+local SpeedManager = _G.Freecam.require("speed")
 
 local Input = {
     MovementVector = Vector3.zero,
