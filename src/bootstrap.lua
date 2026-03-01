@@ -45,4 +45,30 @@ function Bootstrap.Init()
     UI.IsOpen = true
 end
 
+-- Global self-destruct function called by UI Close Button
+function Bootstrap.Unload()
+    local KeybindManager = _G.Freecam.require("keybind")
+    local Input = _G.Freecam.require("input")
+    local Camera = _G.Freecam.require("camera")
+    local Nametag = _G.Freecam.require("nametag")
+    local Recording = _G.Freecam.require("recording")
+    local Visuals = _G.Freecam.require("visuals")
+    local UI = _G.Freecam.require("ui")
+
+    print("[Freecam] Unloading system...")
+
+    pcall(function() Camera.Cleanup() end)
+    pcall(function() Nametag.Cleanup() end)
+    pcall(function() Visuals.Cleanup() end)
+    pcall(function() Recording.Cleanup() end)
+    pcall(function() UI.Cleanup() end)
+
+    -- Note: KeybindManager and Input might have stray connections, disconnect them if they exist
+    -- In this architecture we can rely on Roblox's garbage collection on script deletion for general Input event wrappers if needed, 
+    -- but setting Loaded to false prevents execution loop
+    _G.Freecam.Loaded = false
+    
+    print("[Freecam] System successfully unloaded.")
+end
+
 return Bootstrap

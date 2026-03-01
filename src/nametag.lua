@@ -86,4 +86,19 @@ function Nametag.Toggle(state)
     end
 end
 
+function Nametag.Cleanup()
+    -- Disconnect events
+    for _, conn in ipairs(Nametag._connections) do
+        if conn and typeof(conn) == "RBXScriptConnection" then
+            conn:Disconnect()
+        end
+    end
+    Nametag._connections = {}
+    
+    -- Restore all nametags
+    if Nametag.IsHidden then
+        Nametag.Toggle(false)
+    end
+end
+
 return Nametag

@@ -107,4 +107,20 @@ function Recording.Toggle()
     end
 end
 
+function Recording.Cleanup()
+    if Recording.IsRecording then
+        Recording.Toggle() -- Toggle off
+    end
+    
+    if Recording.DotTween then
+        Recording.DotTween:Cancel()
+        Recording.DotTween = nil
+    end
+
+    if Recording.IndicatorFrame then
+        Recording.IndicatorFrame:Destroy()
+        Recording.IndicatorFrame = nil
+    end
+end
+
 return Recording

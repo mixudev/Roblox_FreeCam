@@ -125,4 +125,27 @@ function Visuals.ToggleHighlights(state)
     end
 end
 
+function Visuals.Cleanup()
+    -- Disconnect events
+    for _, conn in ipairs(Visuals._connections) do
+        if conn and typeof(conn) == "RBXScriptConnection" then
+            conn:Disconnect()
+        end
+    end
+    Visuals._connections = {}
+
+    -- Revert visual changes
+    if Visuals.NightVisionEnabled then
+        Visuals.ToggleNightVision(false)
+    end
+    
+    if Visuals.HighlightsEnabled then
+        Visuals.ToggleHighlights(false)
+    end
+    
+    -- Destroy remnant highlights folder just in case
+    local folder = Workspace:FindFirstChild("FreecamHighlights")
+    if folder then folder:Destroy() end
+end
+
 return Visuals

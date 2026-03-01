@@ -107,6 +107,7 @@ local ModulesToLoad = {
     "nametag",
     "recording",
     "visuals",
+    "spring",
     "camera",
     "ui"
 }
