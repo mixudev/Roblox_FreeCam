@@ -133,6 +133,8 @@ loaderText.Text = "Freecam Loading...\n(Remote: " .. tostring(isRemote) .. ")"
 local corner = Instance.new("UICorner", loaderText)
 corner.CornerRadius = UDim.new(0, 8)
 
+-- "bootstrap" tidak dimasukkan ke sini, karena akan dipanggil secara eksplisit
+-- setelah semua modul lain berhasil di-load
 local ModulesToLoad = {
     "config",
     "spring",
@@ -143,8 +145,7 @@ local ModulesToLoad = {
     "recording",
     "visuals",
     "camera",
-    "ui",
-    "bootstrap"
+    "ui"
 }
 
 -- Load all modules in dependency order
@@ -155,7 +156,7 @@ local failedModules = {}
 
 for i, modName in ipairs(ModulesToLoad) do
     loaderText.Text = "Loading " .. modName .. "...\n(" .. i .. "/" .. #ModulesToLoad .. ")"
-    task.wait(0.05)
+    -- DIHAPUS: task.wait(0.05) — tidak perlu, memperlambat loading ~0.5 detik
     
     local mod = require_module(modName)
     if mod then

@@ -10,9 +10,9 @@ local Config = {
         ToggleRecording = Enum.KeyCode.G,
         ToggleRecordingModifier = Enum.KeyCode.LeftShift,
 
-        -- UI visibility controls
-        ToggleUI = Enum.KeyCode.L,
-        ToggleUIModifier = Enum.KeyCode.LeftShift,
+        -- UI visibility controls (F5 — DIPISAH dari ToggleFreecam yang pakai Shift+L)
+        ToggleUI = Enum.KeyCode.F5,
+        ToggleUIModifier = nil,
 
         ToggleSidebar = Enum.KeyCode.Tab,  -- show/hide sidebar
 

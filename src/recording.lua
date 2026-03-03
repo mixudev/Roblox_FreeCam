@@ -8,7 +8,8 @@ local TweenService = game:GetService("TweenService")
 local Recording = {
     IsRecording = false,
     IndicatorFrame = nil,
-    DotTween = nil
+    DotTween = nil,
+    _timerActive = false  -- flag untuk menghentikan loop timer saat Cleanup dipanggil
 }
 
 local function CreateIndicator()
@@ -70,11 +71,12 @@ local function CreateIndicator()
     Recording.DotTween = TweenService:Create(dot, tweenInfo, {BackgroundTransparency = 0.8})
     Recording.DotTween:Play()
 
-    -- Basic timer
+    -- Basic timer (berhenti otomatis saat _timerActive = false)
     task.spawn(function()
         local seconds = 0
-        while true do
+        while Recording._timerActive do
             task.wait(1)
+            if not Recording._timerActive then break end  -- double-check setelah wait
             if Recording.IsRecording then
                 seconds = seconds + 1
                 local m = math.floor(seconds / 60)
@@ -89,6 +91,7 @@ local function CreateIndicator()
 end
 
 function Recording.Init()
+    Recording._timerActive = true
     CreateIndicator()
 end
 
@@ -108,6 +111,8 @@ function Recording.Toggle()
 end
 
 function Recording.Cleanup()
+    Recording._timerActive = false  -- menghentikan loop timer
+    
     if Recording.IsRecording then
         Recording.Toggle() -- Toggle off
     end
