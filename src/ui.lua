@@ -30,7 +30,8 @@ local UI = {
     _toggles = {},
     _pages = {},
     _navButtons = {},
-    _currentPage = nil
+    _currentPage = nil,
+    _connections = {}
 }
 
 -- Local helpers
@@ -353,7 +354,7 @@ function UI.Init()
     sbToggle.Size = UDim2.new(0,40,0,40)
     sbToggle.Position = UDim2.new(0,5,0.5,-20)
     sbToggle.BackgroundTransparency = 1
-    sbToggle.Text = "≡"
+    sbToggle.Text = "="
     sbToggle.TextColor3 = Config.UI.TextColor
     sbToggle.Font = Config.UI.Font
     sbToggle.TextSize = 20
