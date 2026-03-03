@@ -69,6 +69,7 @@ local function MakeDraggable(topbar, frame)
             update(input)
         end
     end)
+    UI._connections = UI._connections or {}
     table.insert(UI._connections, _dragConn)
 end
 
@@ -190,6 +191,7 @@ local function CreateSlider(parent, text, min, max, default, callback)
         end
     end)
     -- Simpan koneksi ke UI._connections agar bisa di-disconnect saat Cleanup
+    UI._connections = UI._connections or {}
     table.insert(UI._connections, UserInputService.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
