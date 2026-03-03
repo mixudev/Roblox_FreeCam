@@ -24,18 +24,23 @@ function Bootstrap.Init()
 
     -- 2. Register Hotkeys based on config
     
-    -- RightCtrl toggles UI
-    KeybindManager.Register(Config.Keybinds.ToggleUI, nil, function()
+    -- Shift+L toggles UI
+    KeybindManager.Register(Config.Keybinds.ToggleUI, Config.Keybinds.ToggleUIModifier, function()
         UI.Toggle()
     end)
+    
+    -- Tab toggles sidebar
+    KeybindManager.Register(Config.Keybinds.ToggleSidebar, nil, function()
+        UI.ToggleSidebar()
+    end)
 
-    -- Toggle Freecam
+    -- Shift+L toggles Freecam
     KeybindManager.Register(Config.Keybinds.ToggleFreecam, Config.Keybinds.ToggleFreecamModifier, function()
         Camera.Toggle()
         UI.UpdateToggles()
     end)
 
-    -- Toggle Recording
+    -- Shift+G toggles Recording
     KeybindManager.Register(Config.Keybinds.ToggleRecording, Config.Keybinds.ToggleRecordingModifier, function()
         Recording.Toggle()
         UI.UpdateToggles()

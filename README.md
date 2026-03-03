@@ -1,59 +1,161 @@
-# Professional Executor Freecam System
+# Professional Freecam Studio v2.0
 
-A complete drone-style, cinematic freecam tool designed specifically for Roblox executor injection via `loadstring`. 
+A production-ready cinematic freecam system for Roblox games. Features responsive UI, advanced camera modes, smooth physics, and professional visual effects.
 
-## 📁 Required GitHub Structure
+## ✨ Key Features
 
-Your repository should be structured as follows before running the dynamic loader:
+- **Responsive Dashboard UI** - Adaptive layout that works on all screen sizes
+- **Avatar Retention** - Character stays visible and accessible while in freecam
+- **Cinematic Camera Modes** - Free Flight, Smooth Follow, Orbit, Dolly Zoom, Static, Slow Motion
+- **Professional Movement** - Spring-based physics with adjustable smoothness & acceleration
+- **Advanced Effects** - Camera shake, depth-of-field simulation, motion smoothing
+- **Modern Interface** - Dark glassmorphism theme with smooth animations
+- **UI Controls** - Minimize, collapse sidebar, floating button for quick access
+
+## 📁 Repository Structure
 
 ```
 /
 ├── loader.lua              # EXECUTOR ENTRY POINT
 │
 └── src/
-    ├── config.lua          # Centralized configuration mapping
-    ├── keybind.lua         # Shortcut management
-    ├── input.lua           # Continuous movement vector tracking
-    ├── speed.lua           # Speed / scaling data variables
-    ├── recording.lua       # Roblox screen recording toggles
-    ├── nametag.lua         # Humanoid DisplayName/Overhead hiding
-    ├── camera.lua          # Core cinematic drone calculation
-    ├── ui.lua              # Dashboard interface rendering
-    └── bootstrap.lua       # Wiring and system initialization
+    ├── bootstrap.lua       # System initialization & keybinds
+    ├── camera.lua          # Core camera logic + cinematic modes
+    ├── config.lua          # Configuration & UI theming
+    ├── input.lua           # Input state management (keyboard)
+    ├── keybind.lua         # Keybind registration & handling
+    ├── nametag.lua         # Player name/billboard hiding
+    ├── recording.lua       # Screen recording toggle
+    ├── speed.lua           # Speed state & multipliers
+    ├── spring.lua          # Spring physics library
+    ├── ui.lua              # Dashboard interface (responsive & modular)
+    └── visuals.lua         # Night vision & ESP highlights
 ```
 
-## 🚀 Setup Instructions
+## 🚀 Quick Start Guide
 
-1. Create a GitHub Repository and upload the `src` folder containing all `.lua` modules.
-2. Open `loader.lua`.
-3. Locate line `4` (`local GITHUB_RAW_BASE = "https://raw.githubusercontent.com/..."`).
-4. Replace the URL with your raw github user content link pointing to the `src` folder (ensure it ends with a slash `/`).
-5. Upload `loader.lua` to the root of your repository or keep it as your executor script.
+### For Users
 
-## 🎮 Executor Usage Example
-
-Users only need to copy/paste the `loader.lua` logic or a direct URL into their executor:
-
+1. Copy this command and paste into your Roblox executor:
 ```lua
--- Example execution using your raw file URL
 loadstring(game:HttpGet("https://raw.githubusercontent.com/YourName/YourRepo/main/loader.lua"))()
 ```
 
-### Shortcuts & Controls
+### For Developers
 
-Once loaded, use these shortcuts:
-* **SHIFT + L**: Toggle Freecam On/Off
-* **W A S D**: Move Forward/Left/Back/Right
-* **Q / E**: Move Down / Up
-* **Scroll Wheel**: Adjust base speed
-* **Hold SHIFT**: Speed Boost multiplier
-* **Hold CTRL**: Precision SLOW multiplier
-* **SHIFT + G**: Toggle Screen Recording indicator & F12 capture
-* **Right Control**: Toggle Sidebar Dashboard UI open/closed
+1. Create a GitHub repository with the structure above
+2. Upload all `src/` files to your repository
+3. Edit `loader.lua` line 4: Replace the raw GitHub URL with your repo's `src/` folder URL
+4. Share the `loader.lua` URL with users
 
-## 🛠️ Maintenance Guide
+## 🎮 Keyboard Controls
 
-* **Configuration**: Use `config.lua` to adjust UI colors, base camera speeds, max speeds, FOV, and hotkeys. The `config.lua` acts as the single source of truth.
-* **Adding New Sections to UI**: Open `ui.lua` and use the helper functions `CreateSlider` or `CreateToggle` just before the `scroll.CanvasSize` calculation to automatically append new interactive UI parameters. 
-* **Changing Modifiers**: To implement new modifiers in `speed.lua`, expose setter functions and call them from `ui.lua`. Use `SpeedManager.GetSomething` inside `camera.lua` `UpdateCamera()`.
-* **Dependencies**: Be cautious adding new dependencies. In Roblox executor context, they are fetched dynamically via `HttpGet`. Always update `ModulesToLoad` array inside `loader.lua` if you add a new `.lua` file inside `src`. Do not use circular dependencies.
+### UI Navigation
+- **Shift + L** - Toggle dashboard visibility
+- **Tab** - Show/hide sidebar menu
+
+### Freecam Movement
+- **Shift + L** (in-game) - Enable/disable freecam mode
+- **W** - Move forward
+- **A** - Move left
+- **S** - Move backward
+- **D** - Move right
+- **Q** - Move down
+- **E** - Move up
+- **Scroll Up/Down** - Adjust movement speed
+- **Hold Shift** - 3x speed boost multiplier
+- **Hold Ctrl** - 0.2x precision slow mode
+- **Drag Mouse** - Smooth cinematic camera rotation
+
+### Additional Features
+- **Shift + G** - Toggle screen recording indicator
+- **Right Click + Drag** - Alternative rotation control
+
+## 📋 Dashboard Pages
+
+### Camera Page
+- Movement speed presets (Walk, Normal, Fast, Cinematic)
+- Rotation sensitivity slider
+- Boost multiplier adjustment
+- Spring smoothness control
+
+### Cinematic Page (NEW)
+- **Mode Selection** - Choose camera mode (Free, Follow, Orbit, etc.)
+- **Field of View** - Adjustable from 5° to 120°
+- **Camera Shake** - Toggle slight shaking effect
+- **Depth Effect** - Depth-of-field intensity slider
+- **Motion Smoothing** - Camera movement interpolation
+
+### Visuals Page
+- Hide all player nametags
+- Player highlights (ESP)
+- Night vision mode
+- Recording indicator
+
+### Settings Page
+- Enable/disable freecam
+- Keyboard control reference
+- Help documentation
+
+## 🎬 Camera Modes Explained
+
+| Mode | Description |
+|------|-------------|
+| **Free** | Full manual control - fly anywhere with smooth physics |
+| **Smooth Follow** | Auto-follow a target with smooth interpolation |
+| **Orbit** | Circular orbit around a target position |
+| **Dolly Zoom** | Perspective zoom effect (cinematic hallmark) |
+| **Static** | Fixed camera shot - set once, locks position |
+| **Slow Motion** | 0.25x time scaling for dramatic slow-mo shots |
+
+## ⚙️ Configuration
+
+Edit `src/config.lua` to customize:
+
+- **Movement Speed** - Base speed: 50 studs/sec, max: 200
+- **Rotation Sensitivity** - Mouse movement multiplier (default: 0.5)
+- **Boost Multiplier** - Shift key speed increase (default: 3x)
+- **Smoothness** - Spring damping (0.1-1.0, higher = smoother)
+- **FOV Control** - Default field of view (default: 70°)
+- **UI Theme** - Colors, animations, corner radius
+
+## 🔧 Architecture
+
+The system is modular and production-ready:
+
+- **camera.lua** - Spring physics-based camera with cinematic modes
+- **ui.lua** - Responsive dashboard with page system & animations
+- **input.lua** - Keystroke tracking with speed multipliers
+- **bootstrap.lua** - Dependency injection & event wiring
+
+Each module is self-contained and can be easily extended.
+
+## 🐛 Troubleshooting
+
+**Avatar disappears in freecam?**
+- Avatar is intentionally hidden for clarity. Enable "Show Avatar" in Settings if needed.
+
+**Sidebar won't appear?**
+- Press Tab to toggle sidebar visibility
+- Check that the main dashboard is open (Shift+L)
+
+**Camera movement feels slow?**
+- Increase Speed Presets (Camera page)
+- Adjust Spring Smoothness slider
+- Hold Shift for 3x boost
+
+**Mouse rotation not working?**
+- Ensure freecam is ENABLED (toggle with Shift+L)
+- Press Tab to ensure sidebar isn't blocking mouse input
+
+## 📝 Notes
+
+- This is production-ready code for Roblox executors
+- All features are optimized for performance
+- No external dependencies required
+- Clean, modular architecture for easy customization
+- Fully featured for cinematic film-making in-game
+
+---
+
+**Made for professional Roblox cinematography and recording.**

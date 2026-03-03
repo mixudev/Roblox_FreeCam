@@ -6,11 +6,15 @@ local Config = {
     Keybinds = {
         ToggleFreecam = Enum.KeyCode.L,
         ToggleFreecamModifier = Enum.KeyCode.LeftShift,
-        
+
         ToggleRecording = Enum.KeyCode.G,
         ToggleRecordingModifier = Enum.KeyCode.LeftShift,
-        
-        ToggleUI = Enum.KeyCode.RightControl,
+
+        -- UI visibility controls
+        ToggleUI = Enum.KeyCode.L,
+        ToggleUIModifier = Enum.KeyCode.LeftShift,
+
+        ToggleSidebar = Enum.KeyCode.Tab,  -- show/hide sidebar
 
         MoveForward = Enum.KeyCode.W,
         MoveBackward = Enum.KeyCode.S,
@@ -32,7 +36,15 @@ local Config = {
         PrecisionMultiplier = 0.2,-- Speed multiplier when holding Precision key
         Smoothness = 0.85,        -- Value between 0 (instant) to 1 (infinite inertia)
         ScrollZoomSpeed = 10,     -- Speed added/removed per scroll tick
-        FOV = 70                  -- Default Field of View
+        FOV = 70,                 -- Default Field of View
+        Acceleration = 8,         -- Higher means snappier acceleration/deceleration
+        ShakeMagnitude = 0.5,     -- Intensity used by camera shake
+
+        Cinematic = {
+            Modes = {"Free","SmoothFollow","Orbit","DollyZoom","Static","SlowMotion"},
+            DefaultMode = "Free",
+            DepthEffect = 0          -- 0..1, intensity of depth simulation
+        }
     },
 
     -- UI Theme
