@@ -52,7 +52,7 @@ local function require_module(path)
         elseif not res or type(res) ~= "string" or #res < 5 then
             errorMsg = "Empty or invalid response from " .. url
         else
-            -- Remove BOM if present
+            -- Remove BOM if present (UTF-8 BOM: EF BB BF)
             local content = res
             if type(content) == "string" and content:sub(1,3) == "\239\187\191" then
                 content = content:sub(4)
