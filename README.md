@@ -34,19 +34,52 @@ A production-ready cinematic freecam system for Roblox games. Features responsiv
 
 ## 🚀 Quick Start Guide
 
-### For Users
+### For Users (Loadstring Method - Remote)
 
 1. Copy this command and paste into your Roblox executor:
 ```lua
 loadstring(game:HttpGet("https://raw.githubusercontent.com/YourName/YourRepo/main/loader.lua"))()
 ```
 
-### For Developers
+### For Developers (Local Injection)
 
+**Setup:**
 1. Create a GitHub repository with the structure above
-2. Upload all `src/` files to your repository
+2. Upload all `src/` files to your repository  
 3. Edit `loader.lua` line 4: Replace the raw GitHub URL with your repo's `src/` folder URL
-4. Share the `loader.lua` URL with users
+4. Use the loader via loadstring (see Users section)
+
+**Local Testing (Game Scripts):**
+1. In Studio: Insert ModuleScript named "loader" in ServerScriptService
+2. Paste `loader.lua` content into the ModuleScript
+3. Create folder "src" inside loader, add all module scripts
+4. Call: `require(game.ServerScriptService.loader)()`
+
+### ⚠️ Troubleshooting Module Loading Errors
+
+If you see "Failed to load all modules" message:
+
+**Step 1: Run Diagnostics**
+```lua
+loadstring(game:HttpGet("https://raw.githubusercontent.com/YourName/YourRepo/main/debug_freecam.lua"))()
+```
+
+**Step 2: Check Common Issues**
+
+| Problem | Solution |
+|---------|----------|
+| `HttpGet failed` | Check internet connection, ensure GitHub URLs are correct |
+| `Module path not found` | For local injection, ensure folder structure: `script.Parent/src/[module].lua` |
+| `Parse error in [module]` | Check the module file for Lua syntax errors |
+| `Execution error` | Module has runtime error - check Console for details |
+
+**Step 3: Manual Debug (Local Injection)**
+```lua
+-- Test if modules load correctly
+local loader = require(game.ServerScriptService.loader)
+local config = loader.require("config")
+print(config) -- Should print a table
+```
 
 ## 🎮 Keyboard Controls
 

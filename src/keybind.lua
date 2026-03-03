@@ -5,7 +5,8 @@ local UserInputService = game:GetService("UserInputService")
 local Config = _G.Freecam.require("config")
 
 local KeybindManager = {
-    _callbacks = {}
+    _callbacks = {},
+    _connections = {}
 }
 
 -- Checks if a modifier key (if specified) is currently being held down
@@ -15,7 +16,7 @@ local function IsModifierHeld(modifier)
 end
 
 function KeybindManager.Init()
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    local conn = UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
         if input.UserInputType == Enum.UserInputType.Keyboard then
             local callbacks = KeybindManager._callbacks[input.KeyCode]
@@ -28,6 +29,7 @@ function KeybindManager.Init()
             end
         end
     end)
+    table.insert(KeybindManager._connections, conn)
 end
 
 -- Registers a callback for a specific keycode, optionally requiring a modifier key
@@ -39,6 +41,16 @@ function KeybindManager.Register(keyCode, modifierKeyCode, callback)
         modifier = modifierKeyCode,
         callback = callback
     })
+end
+
+function KeybindManager.Cleanup()
+    for _, conn in ipairs(KeybindManager._connections) do
+        if conn and conn.Connected then
+            conn:Disconnect()
+        end
+    end
+    KeybindManager._connections = {}
+    KeybindManager._callbacks = {}
 end
 
 return KeybindManager

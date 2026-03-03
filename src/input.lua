@@ -10,7 +10,8 @@ local Input = {
     MouseDelta = Vector2.zero,
     IsBoosting = false,
     IsPrecision = false,
-    _activeKeys = {}
+    _activeKeys = {},
+    _connections = {}
 }
 
 local function UpdateMovementVector()
@@ -30,7 +31,7 @@ local function UpdateMovementVector()
 end
 
 function Input.Init()
-    UserInputService.InputBegan:Connect(function(input, gp)
+    local conn1 = UserInputService.InputBegan:Connect(function(input, gp)
         if gp then return end
         if input.UserInputType == Enum.UserInputType.Keyboard then
             Input._activeKeys[input.KeyCode] = true
@@ -44,8 +45,9 @@ function Input.Init()
             UpdateMovementVector()
         end
     end)
+    table.insert(Input._connections, conn1)
 
-    UserInputService.InputEnded:Connect(function(input, gp)
+    local conn2 = UserInputService.InputEnded:Connect(function(input, gp)
         if input.UserInputType == Enum.UserInputType.Keyboard then
             Input._activeKeys[input.KeyCode] = nil
             
@@ -58,13 +60,15 @@ function Input.Init()
             UpdateMovementVector()
         end
     end)
+    table.insert(Input._connections, conn2)
 
-    UserInputService.InputChanged:Connect(function(input, gp)
+    local conn3 = UserInputService.InputChanged:Connect(function(input, gp)
         if input.UserInputType == Enum.UserInputType.MouseWheel then
             local scrollDir = input.Position.Z
             SpeedManager.AdjustSpeed(scrollDir * Config.Camera.ScrollZoomSpeed)
         end
     end)
+    table.insert(Input._connections, conn3)
 end
 
 -- Get mouse delta safely
@@ -80,6 +84,19 @@ function Input.GetSpeedMultiplier()
         return SpeedManager.PrecisionMultiplier
     end
     return 1
+end
+
+function Input.Cleanup()
+    for _, conn in ipairs(Input._connections) do
+        if conn and conn.Connected then
+            conn:Disconnect()
+        end
+    end
+    Input._connections = {}
+    Input._activeKeys = {}
+    Input.MovementVector = Vector3.zero
+    Input.IsBoosting = false
+    Input.IsPrecision = false
 end
 
 return Input

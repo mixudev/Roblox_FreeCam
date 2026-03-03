@@ -67,10 +67,9 @@ function Bootstrap.Unload()
     pcall(function() Visuals.Cleanup() end)
     pcall(function() Recording.Cleanup() end)
     pcall(function() UI.Cleanup() end)
+    pcall(function() KeybindManager.Cleanup() end)
+    pcall(function() Input.Cleanup() end)
 
-    -- Note: KeybindManager and Input might have stray connections, disconnect them if they exist
-    -- In this architecture we can rely on Roblox's garbage collection on script deletion for general Input event wrappers if needed, 
-    -- but setting Loaded to false prevents execution loop
     _G.Freecam.Loaded = false
     
     print("[Freecam] System successfully unloaded.")
